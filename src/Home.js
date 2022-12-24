@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,58 +9,54 @@ import {
   Image,
   ActivityIndicator,
 } from "react-native";
-import React from "react";
-import { Configuration, OpenAIApi } from "openai";
-import { API_TOKEN } from "@env";
 
-export default function Home() {
-  const [prompt, onChangePrompt] = React.useState(
-    "Cthulu, intricate sand sculpture, high detail,UHD"
-  );
-  const [result, setResult] = React.useState("");
+const App = () => {
+  const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = React.useState(false);
-  const [imagePlaceholder, setimagePlaceholder] = React.useState(
+  const [imageUrl, setImageUrl] = React.useState(
     "https://furntech.org.za/wp-content/uploads/2017/05/placeholder-image-300x225.png"
   );
 
-  const configuration = new Configuration({
-    apiKey: API_TOKEN,
-  });
+  const handleSubmit = () => {
+    setLoading(true);
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `prompt=${prompt}&size=small`,
+    };
 
-  const openai = new OpenAIApi(configuration);
-
-  const generateImage = async () => {
-    try {
-      onChangePrompt(`Search ${prompt}..`);
-      setLoading(true);
-      const res = await openai.createImage({
-        prompt: prompt,
-        n: 1,
-        size: "256x256",
+    fetch("https://dalle2api.onrender.com/openai/generateimage", options)
+      .then((response) => response.json())
+      .then((result) => {
+        const url = result.data;
+        setImageUrl(url);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-      setResult(res.data.data[0].url);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <Text style={styles.titleText}>React Native Dalle-E</Text>
+        <Text style={styles.subTitleText}>Powered by nodejs</Text>
         <View style={styles.TextInputcontainer}>
           <TextInput
             style={styles.textInput}
-            onChangeText={onChangePrompt}
+            onChangeText={setPrompt}
             value={prompt}
             editable
             multiline
             numberOfLines={4}
           />
         </View>
-        <TouchableOpacity style={styles.generateButton} onPress={generateImage}>
+        <TouchableOpacity style={styles.generateButton} onPress={handleSubmit}>
           <Text style={styles.generateButtonText}>Generate</Text>
         </TouchableOpacity>
         {loading ? (
@@ -74,11 +71,11 @@ export default function Home() {
         )}
 
         <View style={styles.generatedImageContainer}>
-          {result.length > 0 ? (
+          {imageUrl ? (
             <Image
               style={styles.generatedImage}
               source={{
-                uri: result,
+                uri: imageUrl,
               }}
             />
           ) : (
@@ -86,7 +83,7 @@ export default function Home() {
               <Image
                 style={styles.generatedImage}
                 source={{
-                  uri: imagePlaceholder,
+                  uri: imageUrl,
                 }}
               />
             </>
@@ -95,7 +92,7 @@ export default function Home() {
       </View>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -112,6 +109,12 @@ const styles = StyleSheet.create({
     fontFamily: "Cochin",
     textAlign: "center",
   },
+  subTitleText: {
+    fontSize: 10,
+    fontWeight: "500",
+    fontFamily: "Cochin",
+    textAlign: "center",
+  },
 
   TextInputcontainer: {
     height: 100,
@@ -124,7 +127,8 @@ const styles = StyleSheet.create({
   textInput: {
     width: "100%",
     height: "100%",
-    padding: 10,
+    padding: 20,
+    marginTop: 10,
   },
   generateButton: {
     height: 50,
@@ -147,5 +151,8 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     resizeMode: "contain",
+    borderRadius: 10,
   },
 });
+
+export default App;
