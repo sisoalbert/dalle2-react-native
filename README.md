@@ -9,7 +9,7 @@ Node.js npm (comes with Node.js)
 Git clone the project:
 
 ```
-git clone https://github.com/sisoalbert/dalle2-react-native
+git clone https://github.com/sisoalbert/dalle2-react-native.git
 
 ```
 
