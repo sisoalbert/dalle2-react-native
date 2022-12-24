@@ -9,14 +9,14 @@ Node.js npm (comes with Node.js)
 Git clone the project:
 
 ```
-git clone https://github.com/buyly-organisation/buyly-media-api
+git clone https://github.com/sisoalbert/dalle2-react-native
 
 ```
 
 Install dependencies. Run the following command to install the necessary dependencies:
 
 ```
-npm install
+yarn
 
 ```
 
