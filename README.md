@@ -37,5 +37,7 @@ Then follow  **step 7**    below.
 10.  Create a function to handle generating an image using Dalle 2. This function should use the `createImage` method of the `OpenAIApi` object to send a request to Dalle 2 with the desired prompt and other options, such as the number of images to generate and the size of the images. The function should also handle any errors that may occur and set a loading state while the image is being generated.
 11.  In your component’s render method, include a form for entering a prompt and a button for triggering the image generation function. You can also include a loading indicator and display the generated image when it is available.
 
+
+[![outube Implementation](https://thumbs.dreamstime.com/b/famous-video-player-youtube-logo-screen-social-media-sharing-130899078.jpg)](https://youtu.be/hstZMAFJVuM)
 [Youtube Implementation](https://youtu.be/hstZMAFJVuM)
 
